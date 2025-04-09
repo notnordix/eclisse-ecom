@@ -1,37 +1,35 @@
 <?php
 // Database configuration from environment variables
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
-define('DB_NAME', getenv('DB_NAME') ?: 'eclisse_db');
+define('DB_HOST', getenv('MYSQL_HOST') ?: getenv('DB_HOST') ?: 'localhost');
+define('DB_USER', getenv('MYSQL_USER') ?: getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('MYSQL_PASSWORD') ?: getenv('DB_PASS') ?: '');
+define('DB_NAME', getenv('MYSQL_DATABASE') ?: getenv('DB_NAME') ?: 'eclisse_db');
 
 // Create connection
-function getDbConnection()
-{
+function getDbConnection() {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS);
-
+    
     // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-
+    
     // Create database if not exists
     $sql = "CREATE DATABASE IF NOT EXISTS " . DB_NAME;
     if ($conn->query($sql) === FALSE) {
         die("Error creating database: " . $conn->error);
     }
-
+    
     // Select the database
     $conn->select_db(DB_NAME);
-
+    
     return $conn;
 }
 
 // Initialize database tables
-function initDatabase()
-{
+function initDatabase() {
     $conn = getDbConnection();
-
+    
     // Create products table
     $sql = "CREATE TABLE IF NOT EXISTS products (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
@@ -44,17 +42,17 @@ function initDatabase()
         is_deleted TINYINT(1) DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )";
-
+    
     if ($conn->query($sql) === FALSE) {
         die("Error creating products table: " . $conn->error);
     }
-
+    
     // Add is_deleted column if it doesn't exist
     $result = $conn->query("SHOW COLUMNS FROM products LIKE 'is_deleted'");
     if ($result->num_rows == 0) {
         $conn->query("ALTER TABLE products ADD COLUMN is_deleted TINYINT(1) DEFAULT 0");
     }
-
+    
     // Create product images table
     $sql = "CREATE TABLE IF NOT EXISTS product_images (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
@@ -65,11 +63,11 @@ function initDatabase()
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
     )";
-
+    
     if ($conn->query($sql) === FALSE) {
         die("Error creating product_images table: " . $conn->error);
     }
-
+    
     // Create blog posts table
     $sql = "CREATE TABLE IF NOT EXISTS blog_posts (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
@@ -78,11 +76,11 @@ function initDatabase()
         image VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )";
-
+    
     if ($conn->query($sql) === FALSE) {
         die("Error creating blog_posts table: " . $conn->error);
     }
-
+    
     // Create orders table
     $sql = "CREATE TABLE IF NOT EXISTS orders (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
@@ -95,11 +93,11 @@ function initDatabase()
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (product_id) REFERENCES products(id)
     )";
-
+    
     if ($conn->query($sql) === FALSE) {
         die("Error creating orders table: " . $conn->error);
     }
-
+    
     // Create admin users table
     $sql = "CREATE TABLE IF NOT EXISTS admin_users (
         id INT(11) AUTO_INCREMENT PRIMARY KEY,
@@ -107,25 +105,26 @@ function initDatabase()
         password VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )";
-
+    
     if ($conn->query($sql) === FALSE) {
         die("Error creating admin_users table: " . $conn->error);
     }
-
+    
     // Insert default admin user if not exists
     $username = 'admin';
     $password = password_hash('admin123', PASSWORD_DEFAULT);
-
+    
     $stmt = $conn->prepare("SELECT id FROM admin_users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
-
+    
     if ($result->num_rows == 0) {
         $stmt = $conn->prepare("INSERT INTO admin_users (username, password) VALUES (?, ?)");
         $stmt->bind_param("ss", $username, $password);
         $stmt->execute();
     }
-
+    
     $conn->close();
 }
+?>
