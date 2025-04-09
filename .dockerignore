@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env
+.env.example
+.dockerignore
+Dockerfile
+railway.json
+README.md
+vendor/
+node_modules/
