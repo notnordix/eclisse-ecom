@@ -1,7 +1,8 @@
 {
-    "name": "eclisse/ecommerce",
-    "description": "Eclisse E-commerce Website",
-    "require": {
-      "php": "^7.4"
-    }
+  "require": {
+    "php": "^7.4",
+    "ext-mysqli": "*"
+  },
+  "require-dev": {
   }
+}
