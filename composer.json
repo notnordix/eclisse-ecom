@@ -1,0 +1,7 @@
+{
+    "name": "eclisse/ecommerce",
+    "description": "Eclisse E-commerce Website",
+    "require": {
+      "php": "^7.4"
+    }
+  }
