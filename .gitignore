@@ -1,0 +1,30 @@
+# Environment variables
+.env
+
+# Uploaded files
+uploads/
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# Composer
+vendor/
+composer.lock
+
+# Cache files
+*.cache
