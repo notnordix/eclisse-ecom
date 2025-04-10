@@ -2469,8 +2469,7 @@ footer ul li a:hover::before {
 
 /* Products Hero */
 .products-hero {
-  background-image: url("../images/hero3.jpg");
-  background-position: center 30%;
+  background-image: url("../images/hero2.jpeg");
 }
 
 /* Category Filter */

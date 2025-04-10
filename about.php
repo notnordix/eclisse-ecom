@@ -21,7 +21,7 @@ include 'includes/header.php';
             <div class="col-md-6 mb-5 mb-md-0">
                 <div class="about-image-wrapper">
                     <div class="about-image slide-in-left">
-                        <img src="assets/images/about.jpg" class="img-fluid" alt="À propos d'Éclisse">
+                        <img src="assets/images/hero.jpeg" class="img-fluid" alt="À propos d'Éclisse">
                     </div>
                     <div class="about-accent"></div>
                 </div>
